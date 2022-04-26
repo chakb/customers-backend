@@ -70,4 +70,16 @@ customersRouter.put(
   },
 );
 
+customersRouter.delete('/:id', (req, res) => {
+  if (!uuidValidate(req.params.id)) {
+    return res.status(400).send({ error: 'Invalid id' });
+  }
+  const customer = customers.find((c) => c.id === req.params.id);
+  if (!customer) {
+    return res.status(400).send({ error: 'Customer could not be deleted' });
+  }
+  customers = customers.filter((c) => c.id !== req.params.id);
+  res.status(200).send(customer);
+});
+
 module.exports = customersRouter;
