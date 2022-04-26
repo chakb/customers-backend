@@ -1,6 +1,6 @@
 const customersRouter = require('express').Router();
 const { check, validationResult } = require('express-validator');
-const { v4: uuidv4 } = require('uuid');
+const { v4: uuidv4, validate: uuidValidate } = require('uuid');
 
 let customers = [];
 
@@ -32,5 +32,16 @@ customersRouter.post(
     res.status(201).send(customer);
   },
 );
+
+customersRouter.get('/:id', (req, res) => {
+  if (!uuidValidate(req.params.id)) {
+    return res.status(400).send('Invalid id');
+  }
+  const customer = customers.find((c) => c.id === req.params.id);
+  if (!customer) {
+    return res.status(204).send({});
+  }
+  res.status(200).send(customer);
+});
 
 module.exports = customersRouter;
