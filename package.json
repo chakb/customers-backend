@@ -1,0 +1,27 @@
+{
+  "name": "customers-backend",
+  "version": "1.0.0",
+  "description": "Backend (Node.js) that manages customer data for a small shop",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chakb/customers-backend.git"
+  },
+  "author": "Emilio Sánchez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chakb/customers-backend/issues"
+  },
+  "homepage": "https://github.com/chakb/customers-backend#readme",
+  "dependencies": {
+    "express": "^4.18.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.14.0"
+  }
+}
