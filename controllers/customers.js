@@ -35,7 +35,7 @@ customersRouter.post(
 
 customersRouter.get('/:id', (req, res) => {
   if (!uuidValidate(req.params.id)) {
-    return res.status(400).send('Invalid id');
+    return res.status(400).send({ error: 'Invalid id' });
   }
   const customer = customers.find((c) => c.id === req.params.id);
   if (!customer) {
@@ -43,5 +43,31 @@ customersRouter.get('/:id', (req, res) => {
   }
   res.status(200).send(customer);
 });
+
+customersRouter.put(
+  '/:id',
+  check('name').isLength({ min: 1 }).withMessage('Name is required'),
+  check('surname').isLength({ min: 1 }).withMessage('Surname is required'),
+  check('email').isEmail().withMessage('Email is required'),
+  check('birthDate').isISO8601().withMessage('Birth date is required'),
+  (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    if (!uuidValidate(req.params.id)) {
+      return res.status(400).send({ error: 'Invalid id' });
+    }
+    const customer = customers.find((c) => c.id === req.params.id);
+    if (!customer) {
+      return res.status(400).send({ error: 'Customer could not be updated' });
+    }
+    customer.name = req.body.name;
+    customer.surname = req.body.surname;
+    customer.email = req.body.email;
+    customer.birthDate = req.body.birthDate;
+    res.status(200).send(customer);
+  },
+);
 
 module.exports = customersRouter;
