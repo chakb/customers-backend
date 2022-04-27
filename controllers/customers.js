@@ -82,4 +82,11 @@ customersRouter.delete('/:id', (req, res) => {
   res.status(200).send(customer);
 });
 
+if (process.env.NODE_ENV === 'test') {
+  customersRouter.post('/reset', (req, res) => {
+    customers = [];
+    res.status(204).end();
+  });
+}
+
 module.exports = customersRouter;
