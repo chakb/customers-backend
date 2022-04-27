@@ -106,3 +106,31 @@ describe('customer get all', () => {
     expect(response.body).toHaveLength(2);
   });
 });
+
+describe('customer update', () => {
+  let customer;
+  beforeEach(async () => {
+    customer = await api.post('/customer').send({
+      name: 'John',
+      surname: 'Doe',
+      email: 'johndoe@doe.com',
+      birthDate: '2000-01-01',
+    });
+  });
+
+  test('should suceed with valid updated customer', async () => {
+    const updatedCustomer = {
+      name: 'Jane',
+      surname: 'Doe',
+      email: 'janedoe@jane.com',
+      birthDate: '1980-01-01',
+    };
+    const response = await api
+      .put(`/customer/${customer.body.id}`)
+      .send(updatedCustomer)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(response.body).toMatchObject(updatedCustomer);
+  });
+});
