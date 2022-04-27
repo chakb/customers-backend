@@ -3,6 +3,11 @@ const app = require('../app');
 
 const api = supertest(app);
 
+beforeEach(async () => {
+  await api.post('/customer/reset');
+  console.log('reseta');
+});
+
 describe('customer creation', () => {
   test('should suceed with valid data', async () => {
     const newCustomer = {
@@ -68,5 +73,36 @@ describe('single customer retrieval', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/);
     expect(response.body.error).toBeDefined();
+  });
+});
+
+describe('customer get all', () => {
+  test('should return empty list if there are no customers', async () => {
+    const response = await api
+      .get('/customer/all')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body).toEqual([]);
+  });
+
+  test('should return all customers', async () => {
+    await api.post('/customer').send({
+      name: 'John',
+      surname: 'Doe',
+      email: 'johndoe@doe.com',
+      birthDate: '2000-01-01',
+    });
+    await api.post('/customer').send({
+      name: 'Jane',
+      surname: 'Doe',
+      email: 'janedoe@jane.com',
+      birthDate: '1980-01-01',
+    });
+
+    const response = await api
+      .get('/customer/all')
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+    expect(response.body).toHaveLength(2);
   });
 });
