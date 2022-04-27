@@ -5,7 +5,6 @@ const api = supertest(app);
 
 beforeEach(async () => {
   await api.post('/customer/reset');
-  console.log('reseta');
 });
 
 describe('customer creation', () => {
