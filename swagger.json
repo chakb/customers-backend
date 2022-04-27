@@ -1,0 +1,223 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "description": "This is a simple Customers API",
+    "version": "1.0.0",
+    "title": "Customers API"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "customers",
+      "description": "everything related to customers"
+    }
+  ],
+  "paths": {
+    "/customer": {
+      "post": {
+        "tags": ["customers"],
+        "summary": "Create a new customer",
+        "requestBody": {
+          "description": "Customer to create",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "surname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns a JSON object that contains the customer just created together with its id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body of the request is not valid"
+          }
+        }
+      }
+    },
+    "/customer/all": {
+      "get": {
+        "tags": ["customers"],
+        "summary": "Returns all the customers",
+        "responses": {
+          "200": {
+            "description": "Returns all the customers in an array of JSON. If no customers are found, the array will be empty",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Customer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/customer/{id}": {
+      "parameters": [
+        {
+          "in": "path",
+          "name": "id",
+          "description": "id of the customer",
+          "required": true,
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      ],
+      "get": {
+        "tags": ["customers"],
+        "summary": "Returns a specific customer from an id",
+        "responses": {
+          "200": {
+            "description": "The customer was found, returns the found customer in JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "The id is valid but the customer doesn't exist, returns an empty JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The id is not a valid id"
+          }
+        }
+      },
+      "put": {
+        "tags": ["customers"],
+        "summary": "Update an existing customer",
+        "requestBody": {
+          "description": "Customer to update",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "surname": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "birthDate": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a JSON object that contains the customer just updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The update was not done"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["customers"],
+        "summary": "Delete an existing customer",
+        "responses": {
+          "200": {
+            "description": "The customer was deleted, retuurn the deleted customer in JSON",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Customer"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The customer could not be deleted"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Customer": {
+        "type": "object",
+        "required": ["id", "name", "surname", "email", "birthDate"],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "surname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthDate": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      }
+    }
+  }
+}
